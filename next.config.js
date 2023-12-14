@@ -5,6 +5,16 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cataas.com",
+        pathname: "/cat/**",
+      },
+    ],
+  },
+};
 
 export default config;

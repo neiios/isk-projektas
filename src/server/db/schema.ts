@@ -39,6 +39,7 @@ export const users = mysqlTable("user", {
     fsp: 3,
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar("image", { length: 255 }),
+  accountType: varchar("accountType", { length: 255 }), // student, teacher, admin
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
