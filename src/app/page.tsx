@@ -5,7 +5,9 @@ export default async function Home() {
     <>
       <div className="flex flex-col gap-12 md:flex-row">
         <div className="flex flex-col gap-4 ">
-          <h1 className="text-5xl font-bold">Lorem ipsum dolor sit amet.</h1>
+          <h1 className="text-5xl font-extrabold">
+            Lorem ipsum dolor sit amet.
+          </h1>
           <h2 className="text-xl">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit,
             magni.
