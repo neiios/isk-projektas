@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default async function Home() {
   return (
-    <main className="mx-auto max-w-5xl px-4 ">
+    <>
       <div className="flex flex-col gap-12 md:flex-row">
         <div className="flex flex-col gap-4 ">
           <h1 className="text-5xl font-bold">Lorem ipsum dolor sit amet.</h1>
@@ -18,6 +18,6 @@ export default async function Home() {
           alt="God's fanciest tutor"
         />
       </div>
-    </main>
+    </>
   );
 }
