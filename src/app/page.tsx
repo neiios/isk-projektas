@@ -3,7 +3,7 @@ import Image from "next/image";
 export default async function Home() {
   return (
     <>
-      <div className="flex flex-col gap-12 md:flex-row">
+      <div className="flex max-w-5xl flex-col gap-12 md:flex-row">
         <div className="flex flex-col gap-4 ">
           <h1 className="text-5xl font-extrabold">
             Lorem ipsum dolor sit amet.
