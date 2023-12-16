@@ -13,22 +13,7 @@ import { type AdapterAccount } from "next-auth/adapters";
 
 export const mysqlTable = mysqlTableCreator((name) => `isk-projektas_${name}`);
 
-export const posts = mysqlTable(
-  "post",
-  {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 }).notNull(),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
-  },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
+// oauth tables
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
@@ -103,3 +88,48 @@ export const verificationTokens = mysqlTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
+
+// custom tables
+
+export const reservations = mysqlTable("reservation", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  studentId: varchar("studentId", { length: 255 }).notNull(),
+  tutorId: varchar("tutorId", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+});
+
+export const reservationsRelations = relations(reservations, ({ one }) => ({
+  student: one(users, {
+    fields: [reservations.studentId],
+    references: [users.id],
+  }),
+  tutor: one(users, { fields: [reservations.tutorId], references: [users.id] }),
+}));
+
+export const reviews = mysqlTable("review", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  reservationId: bigint("reservationId", { mode: "number" }).notNull(),
+  tutorId: varchar("tutorId", { length: 255 }).notNull(),
+  studentId: varchar("studentId", { length: 255 }).notNull(),
+  rating: int("rating").notNull(),
+  comment: text("comment"),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+});
+
+export const reviewsRelations = relations(reviews, ({ one }) => ({
+  reservation: one(reservations, {
+    fields: [reviews.reservationId],
+    references: [reservations.id],
+  }),
+  student: one(users, {
+    fields: [reviews.studentId],
+    references: [users.id],
+  }),
+  tutor: one(users, { fields: [reviews.tutorId], references: [users.id] }),
+}));
