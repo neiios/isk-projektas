@@ -8,5 +8,5 @@ export default {
   dbCredentials: {
     connectionString: env.DATABASE_URL,
   },
-  tablesFilter: ["isk-projektas_*"],
+  tablesFilter: ["isk_projektas_*"],
 } satisfies Config;

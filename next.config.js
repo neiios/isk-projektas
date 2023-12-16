@@ -13,6 +13,16 @@ const config = {
         hostname: "cataas.com",
         pathname: "/cat/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.googleusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+        pathname: "/**",
+      },
     ],
   },
 };
