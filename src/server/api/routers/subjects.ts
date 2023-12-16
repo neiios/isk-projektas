@@ -1,50 +1,20 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-
-const subjects = [
-  {
-    id: "1",
-    name: "Mathematics",
-  },
-  {
-    id: "2",
-    name: "English",
-  },
-  {
-    id: "3",
-    name: "Physics",
-  },
-  {
-    id: "4",
-    name: "Chemistry",
-  },
-  {
-    id: "5",
-    name: "Biology",
-  },
-  {
-    id: "6",
-    name: "History",
-  },
-  {
-    id: "7",
-    name: "Geography",
-  },
-  {
-    id: "8",
-    name: "Economics",
-  },
-  {
-    id: "9",
-    name: "Computer Science",
-  },
-  {
-    id: "10",
-    name: "Art",
-  },
-];
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
+import { userSubjects, subjects } from "~/server/db/schema";
+import { eq } from "drizzle-orm";
 
 export const subjectsRouter = createTRPCRouter({
-  getSubjects: publicProcedure.query(() => {
-    return subjects;
+  getSubjects: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.subjects.findMany();
+  }),
+  getUserSubjects: protectedProcedure.query(({ ctx }) => {
+    return ctx.db
+      .select()
+      .from(userSubjects)
+      .where(eq(userSubjects.userId, ctx.session.user.id))
+      .leftJoin(subjects, eq(userSubjects.subjectId, subjects.id));
   }),
 });

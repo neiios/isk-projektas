@@ -22,7 +22,9 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col justify-between">
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header></Header>
-          <main className="mx-auto max-w-7xl px-4">{children}</main>
+          <main className="mx-auto flex max-w-7xl flex-col items-center justify-between px-4">
+            {children}
+          </main>
           <Footer></Footer>
         </TRPCReactProvider>
       </body>

@@ -13,11 +13,9 @@ import { type AdapterAccount } from "next-auth/adapters";
 
 export const mysqlTable = mysqlTableCreator((name) => `isk_projektas_${name}`);
 
-// oauth tables
-
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }),
+  name: varchar("name", { length: 255 }).notNull(), // NOTE: not null added manually
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
@@ -25,6 +23,28 @@ export const users = mysqlTable("user", {
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar("image", { length: 255 }),
   accountType: varchar("accountType", { length: 255 }), // student, teacher, admin
+  phoneNumber: varchar("phoneNumber", { length: 255 }),
+  studyYear: int("studyYear"),
+  averageGrade: int("averageGrade"),
+});
+
+export const userSubjects = mysqlTable("user_subject", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  userId: varchar("userId", { length: 255 }).notNull(),
+  subjectId: bigint("subjectId", { mode: "number" }).notNull(),
+});
+
+export const userSubjectsRelations = relations(userSubjects, ({ one }) => ({
+  user: one(users, { fields: [userSubjects.userId], references: [users.id] }),
+  subject: one(subjects, {
+    fields: [userSubjects.subjectId],
+    references: [subjects.id],
+  }),
+}));
+
+export const subjects = mysqlTable("subject", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  name: varchar("name", { length: 255 }).notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -88,8 +108,6 @@ export const verificationTokens = mysqlTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
-
-// custom tables
 
 export const reservations = mysqlTable("reservation", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),

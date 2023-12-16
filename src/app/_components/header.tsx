@@ -7,18 +7,25 @@ export default async function Header() {
 
   return (
     <header className="flex flex-col justify-between px-12 py-6 md:flex-row">
-      <div>Fancy Logo</div>
+      <Link href="/" className="text-xl font-bold">
+        Fancy Logo
+      </Link>
       {/* TODO: make a fancier menu on mobile */}
       <div className="flex flex-col md:flex-row md:gap-8">
-        <Link href="/">Landing Page</Link>
-        <Link
-          href={session ? "/api/auth/signout" : "/api/auth/signin"}
-          className=""
-        >
-          {session ? "Sign out" : "Sign in"}
-        </Link>
-        <Link href="/dashboard">Dashboard</Link>
-        <Link href="/faq">FAQ</Link>
+        {session ? (
+          <>
+            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/profile">Profile</Link>
+            <Link href="/api/auth/signout">Sign Out</Link>
+          </>
+        ) : (
+          <Link
+            href="/api/auth/signin"
+            className="border border-black px-8 py-4 font-bold shadow-sharp"
+          >
+            Sign in
+          </Link>
+        )}
       </div>
     </header>
   );
