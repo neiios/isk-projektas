@@ -11,7 +11,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
-export const mysqlTable = mysqlTableCreator((name) => `isk-projektas_${name}`);
+export const mysqlTable = mysqlTableCreator((name) => `isk_projektas_${name}`);
 
 // oauth tables
 
