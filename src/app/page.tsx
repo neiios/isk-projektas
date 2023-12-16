@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="flex max-w-5xl flex-col gap-12 md:flex-row">
+      <div className="flex max-w-5xl flex-col gap-12 md:min-h-[30rem] md:flex-row">
         <div className="flex flex-col items-center justify-around">
           <div className="flex flex-col gap-8">
             <h1 className="text-5xl font-extrabold">
@@ -26,12 +26,14 @@ export default async function Home() {
             {session ? "Go to dashboard" : "Sign in"}
           </Link>
         </div>
-        <Image
-          src="https://cataas.com/cat/says/Taip, aš irgi korepetitorius"
-          width={500}
-          height={500}
-          alt="God's fanciest tutor"
-        />
+        <div>
+          <Image
+            src="https://cataas.com/cat/says/Taip, aš irgi korepetitorius"
+            width={500}
+            height={500}
+            alt="God's fanciest tutor"
+          />
+        </div>
       </div>
     </>
   );
