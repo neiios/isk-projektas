@@ -21,7 +21,7 @@ export default async function Home() {
 
           <Link
             href={session ? "/dashboard" : "/api/auth/signin"}
-            className="border border-black p-8 font-bold shadow-sharp"
+            className="border border-black px-16 py-8  font-bold shadow-sharp"
           >
             {session ? "Go to dashboard" : "Sign in"}
           </Link>
