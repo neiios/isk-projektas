@@ -1,4 +1,6 @@
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import TutorCard from "~/app/_components/tutor-card";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { getInitials } from "~/utils/helpers";
@@ -11,13 +13,30 @@ export default async function Page() {
     redirect("/404");
   }
 
-  const tutors = await api.users.getAvailableTutors.query();
+  const tutors = await api.users.getAvailableTutors.query(); // TODO: filter reserved tutors
   const threeFirst = tutors.slice(0, 3);
   const subjects = await api.subjects.getSubjects.query();
+  const reservations = await api.reservations.getStudentReservations.query();
+
+  async function handleFastReservation(tutorId: string) {
+    "use server";
+    await api.reservations.addReservation.query({ tutorId: tutorId });
+    revalidatePath("/dashboard/student");
+    redirect("/dashboard/student");
+  }
 
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-5xl font-extrabold">Sveiki, {user.name}!</h1>
+
+      <div>
+        <h2 className="mb-8 text-3xl font-bold">Rezervuotos pamokos</h2>
+        {reservations.map((reservation) => (
+          <div key={reservation.id}>
+            <p>{reservation.tutorId}</p>
+          </div>
+        ))}
+      </div>
 
       <div>
         <h2 className="mb-8 text-3xl font-bold">Greita Rezervacija</h2>
@@ -64,9 +83,10 @@ export default async function Page() {
                 <p className="text-sm">{tutor.description}</p>
               </div>
 
-              <button className="border border-black px-16 py-4 font-bold shadow-sharp">
-                Rezervuoti
-              </button>
+              <TutorCard
+                handleFastReservation={handleFastReservation}
+                tutorId={tutor.id}
+              ></TutorCard>
             </div>
           ))}
         </div>
@@ -87,7 +107,7 @@ export default async function Page() {
           </thead>
           <tbody>
             {tutors.map((tutor) => (
-              <tr>
+              <tr key={tutor.id}>
                 <td>{tutor.name}</td>
                 <td>{tutor.description}</td>
                 <td>

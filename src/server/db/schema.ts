@@ -60,6 +60,7 @@ export const reservations = mysqlTable("reservation", {
   studentId: varchar("studentId", { length: 255 }).notNull(),
   tutorId: varchar("tutorId", { length: 255 }).notNull(),
   approved: int("approved").notNull(),
+  completed: int("finished").notNull(),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
