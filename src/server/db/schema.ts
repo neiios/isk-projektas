@@ -34,13 +34,13 @@ export const users = mysqlTable("user", {
 
 export const userLanguages = mysqlTable("user_languages", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  userId: varchar("tutorId", { length: 255 }).notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   language: mysqlEnum("languageNames", ["Lietuvių", "Anglų", "Rusų", "Lenkų"]),
 });
 
 export const userStudyTypes = mysqlTable("user_study_type", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  tutorId: varchar("tutorId", { length: 255 }).notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   studyType: mysqlEnum("studyType", ["Kontaktiniu", "Nuotoliu"]),
 });
 
