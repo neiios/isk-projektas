@@ -22,25 +22,44 @@ export const users = mysqlTable("user", {
     fsp: 3,
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar("image", { length: 255 }),
-  accountType: varchar("accountType", { length: 255 }), // student, teacher, admin
+  accountType: varchar("accountType", { length: 255 }), // student, tutor
+});
+
+export const students = mysqlTable("students", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
   phoneNumber: varchar("phoneNumber", { length: 255 }),
   studyYear: int("studyYear"),
   averageGrade: int("averageGrade"),
 });
 
+export const tutors = mysqlTable("tutors", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  phoneNumber: varchar("phoneNumber", { length: 255 }),
+  description: text("description"),
+  pricePerHour: int("pricePerHour"),
+  isAvailable: int("isAvailable"),
+});
+
+// if tutor has an entry here - he is teaching this subject
+// if student has an entry here - he wants to learn this subject
 export const userSubjects = mysqlTable("user_subject", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
   userId: varchar("userId", { length: 255 }).notNull(),
   subjectId: bigint("subjectId", { mode: "number" }).notNull(),
 });
 
-export const userSubjectsRelations = relations(userSubjects, ({ one }) => ({
-  user: one(users, { fields: [userSubjects.userId], references: [users.id] }),
-  subject: one(subjects, {
-    fields: [userSubjects.subjectId],
-    references: [subjects.id],
-  }),
-}));
+// makes it hard to test
+// export const userSubjectsRelations = relations(userSubjects, ({ one }) => ({
+//   user: one(users, { fields: [userSubjects.userId], references: [users.id] }),
+//   subject: one(subjects, {
+//     fields: [userSubjects.subjectId],
+//     references: [subjects.id],
+//   }),
+// }));
 
 export const subjects = mysqlTable("subject", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
