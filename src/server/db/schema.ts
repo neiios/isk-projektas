@@ -35,7 +35,7 @@ export const users = mysqlTable("user", {
 export const userLanguages = mysqlTable("user_languages", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
   userId: varchar("userId", { length: 255 }).notNull(),
-  language: mysqlEnum("languageNames", ["Lietuvių", "Anglų", "Rusų", "Lenkų"]),
+  language: mysqlEnum("language", ["Lietuvių", "Anglų", "Rusų", "Lenkų"]),
 });
 
 export const userStudyTypes = mysqlTable("user_study_type", {
@@ -90,7 +90,7 @@ export const userLanguagesRelations = relations(userLanguages, ({ one }) => ({
 
 export const userStudyTypesRelations = relations(userStudyTypes, ({ one }) => ({
   user: one(users, {
-    fields: [userStudyTypes.tutorId],
+    fields: [userStudyTypes.userId],
     references: [users.id],
   }),
 }));
