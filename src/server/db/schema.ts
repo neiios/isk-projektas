@@ -1,12 +1,13 @@
 import { relations, sql } from "drizzle-orm";
 import {
   bigint,
-  index,
   int,
+  mysqlEnum,
   mysqlTableCreator,
-  primaryKey,
+  index,
   text,
   timestamp,
+  primaryKey,
   varchar,
 } from "drizzle-orm/mysql-core";
 import { type AdapterAccount } from "next-auth/adapters";
@@ -15,7 +16,7 @@ export const mysqlTable = mysqlTableCreator((name) => `isk_projektas_${name}`);
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(), // NOTE: not null added manually
+  name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
@@ -23,53 +24,85 @@ export const users = mysqlTable("user", {
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar("image", { length: 255 }),
   accountType: varchar("accountType", { length: 255 }), // student, tutor
+  phoneNumber: varchar("phoneNumber", { length: 255 }), // from students and tutors
+  studyYear: int("studyYear"), // specific to students
+  averageGrade: int("averageGrade"), // specific to students
+  description: text("description"), // specific to tutors
+  pricePerHour: int("pricePerHour"), // specific to tutors
+  isAvailable: int("isAvailable"), // specific to tutors
 });
 
-export const students = mysqlTable("students", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+export const userLanguages = mysqlTable("user_languages", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  userId: varchar("tutorId", { length: 255 }).notNull(),
+  language: mysqlEnum("languageNames", ["Lietuvių", "Anglų", "Rusų", "Lenkų"]),
+});
+
+export const userStudyTypes = mysqlTable("user_study_type", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  tutorId: varchar("tutorId", { length: 255 }).notNull(),
+  studyType: mysqlEnum("studyType", ["Kontaktiniu", "Nuotoliu"]),
+});
+
+export const subjects = mysqlTable("subjects", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
   name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 255 }).notNull(),
-  phoneNumber: varchar("phoneNumber", { length: 255 }),
-  studyYear: int("studyYear"),
-  averageGrade: int("averageGrade"),
 });
 
-export const tutors = mysqlTable("tutors", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 255 }).notNull(),
-  phoneNumber: varchar("phoneNumber", { length: 255 }),
-  description: text("description"),
-  pricePerHour: int("pricePerHour"),
-  isAvailable: int("isAvailable"),
-});
-
-// if tutor has an entry here - he is teaching this subject
-// if student has an entry here - he wants to learn this subject
-export const userSubjects = mysqlTable("user_subject", {
+export const userSubjects = mysqlTable("user_subjects", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
   userId: varchar("userId", { length: 255 }).notNull(),
   subjectId: bigint("subjectId", { mode: "number" }).notNull(),
 });
 
-// makes it hard to test
-// export const userSubjectsRelations = relations(userSubjects, ({ one }) => ({
-//   user: one(users, { fields: [userSubjects.userId], references: [users.id] }),
-//   subject: one(subjects, {
-//     fields: [userSubjects.subjectId],
-//     references: [subjects.id],
-//   }),
-// }));
-
-export const subjects = mysqlTable("subject", {
+export const reservations = mysqlTable("reservation", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  name: varchar("name", { length: 255 }).notNull(),
+  studentId: varchar("studentId", { length: 255 }).notNull(),
+  tutorId: varchar("tutorId", { length: 255 }).notNull(),
+  approved: int("approved").notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-  sessions: many(sessions),
+export const subjectsRelations = relations(subjects, ({ many }) => ({
+  userSubjects: many(userSubjects),
 }));
+
+export const userSubjectsRelations = relations(userSubjects, ({ one }) => ({
+  subject: one(subjects, {
+    fields: [userSubjects.subjectId],
+    references: [subjects.id],
+  }),
+  user: one(users, {
+    fields: [userSubjects.userId],
+    references: [users.id],
+  }),
+}));
+
+export const userLanguagesRelations = relations(userLanguages, ({ one }) => ({
+  user: one(users, {
+    fields: [userLanguages.userId],
+    references: [users.id],
+  }),
+}));
+
+export const userStudyTypesRelations = relations(userStudyTypes, ({ one }) => ({
+  user: one(users, {
+    fields: [userStudyTypes.tutorId],
+    references: [users.id],
+  }),
+}));
+
+export const usersRelationsMany = relations(users, ({ many }) => ({
+  reservations: many(reservations),
+  languages: many(userLanguages),
+  studyTypes: many(userStudyTypes),
+  subjects: many(userSubjects),
+}));
+
+/// OAUTH
 
 export const accounts = mysqlTable(
   "account",
@@ -127,46 +160,3 @@ export const verificationTokens = mysqlTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
-
-export const reservations = mysqlTable("reservation", {
-  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  studentId: varchar("studentId", { length: 255 }).notNull(),
-  tutorId: varchar("tutorId", { length: 255 }).notNull(),
-  createdAt: timestamp("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
-});
-
-export const reservationsRelations = relations(reservations, ({ one }) => ({
-  student: one(users, {
-    fields: [reservations.studentId],
-    references: [users.id],
-  }),
-  tutor: one(users, { fields: [reservations.tutorId], references: [users.id] }),
-}));
-
-export const reviews = mysqlTable("review", {
-  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  reservationId: bigint("reservationId", { mode: "number" }).notNull(),
-  tutorId: varchar("tutorId", { length: 255 }).notNull(),
-  studentId: varchar("studentId", { length: 255 }).notNull(),
-  rating: int("rating").notNull(),
-  comment: text("comment"),
-  createdAt: timestamp("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
-});
-
-export const reviewsRelations = relations(reviews, ({ one }) => ({
-  reservation: one(reservations, {
-    fields: [reviews.reservationId],
-    references: [reservations.id],
-  }),
-  student: one(users, {
-    fields: [reviews.studentId],
-    references: [users.id],
-  }),
-  tutor: one(users, { fields: [reviews.tutorId], references: [users.id] }),
-}));

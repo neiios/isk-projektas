@@ -22,6 +22,10 @@ export default async function Page() {
     .filter((item) => item.subject !== null)
     .map((item) => item.subject?.name);
 
+  if (userInfo.accountType !== "student") {
+    return <div>Not implemented</div>;
+  }
+
   return (
     <>
       <h1 className="mb-20 text-5xl font-extrabold">
@@ -55,7 +59,7 @@ export default async function Page() {
             {userInfo.accountType ?? "Unset"}
           </span>
         </p>
-        <p className="text-lg font-bold">
+        {/* <p className="text-lg font-bold">
           Account Type:{" "}
           <span className="font-normal text-black">
             {userInfo.studyYear ?? "Unset"}
@@ -66,7 +70,7 @@ export default async function Page() {
           <span className="font-normal text-black">
             {userInfo.averageGrade ?? "Unset"}
           </span>
-        </p>
+        </p> */}
         <p className="text-lg font-bold">
           Subjects you want to study:{" "}
           <span className="font-normal text-black">

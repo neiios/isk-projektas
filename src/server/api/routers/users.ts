@@ -8,4 +8,11 @@ export const usersRouter = createTRPCRouter({
       where: eq(users.id, ctx.session.user.id),
     });
   }),
+
+  getAvailableTutors: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.query.users.findMany({
+      where: eq(users.accountType, "tutor"),
+      with: { languages: true, studyTypes: true, subjects: true },
+    });
+  }),
 });
