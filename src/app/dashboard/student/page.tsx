@@ -1,21 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import Image from "next/image";
 import { getInitials } from "~/utils/helpers";
-
-// const tutors = [
-//   {
-//     id: 1,
-//     name: "Leonidas Lopas",
-//     subjects: ["Math", "Physics", "Chemistry"],
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem maiores modi maxime explicabo nisi quam, dolores pariatur reiciendis labore repellat voluptatibus. Impedit vitae eos eum, rerum ipsa adipisci facere minus expedita? Laborum repudiandae, corrupti molestiae corporis sapiente nisi aut doloremque alias. Quaerat nulla eos facilis. Eum nostrum commodi officiis blanditiis!",
-//     rating: 5,
-//     languages: ["Lithuanian", "English"],
-//     places: ["Online", "Vilnius"],
-//   },
-// ];
 
 export default async function Page() {
   const session = await getServerAuthSession();
@@ -27,6 +13,7 @@ export default async function Page() {
 
   const tutors = await api.users.getAvailableTutors.query();
   const threeFirst = tutors.slice(0, 3);
+  const subjects = await api.subjects.getSubjects.query();
 
   return (
     <div className="flex flex-col gap-8">
@@ -48,40 +35,27 @@ export default async function Page() {
               </div>
 
               <div>
-                {/* <div className="grid grid-cols-2">
+                <div className="grid grid-cols-2">
                   <p className="text-sm font-bold">Dėsto:</p>
                   <p className="text-sm">
-                    {tutor.user_subject.subjectId.join(", ")}
+                    {tutor.subjects
+                      .map((subject) => subjects[subject.subjectId - 1]?.name)
+                      .join(", ")}
                   </p>
-                </div> */}
-                {/* <div className="grid grid-cols-2">
+                </div>
+                <div className="grid grid-cols-2">
                   <p className="text-sm font-bold">Kalbos:</p>
-                  <p className="text-sm">{tutor.languages.join(", ")}</p>
+                  <p className="text-sm">
+                    {tutor.languages
+                      .map((language) => language.language)
+                      .join(", ")}
+                  </p>
                 </div>
                 <div className="grid grid-cols-2">
                   <p className="text-sm font-bold">Dėstymo vietos:</p>
-                  <p className="text-sm">{tutor.places.join(", ")}</p>
-                </div> */}
-                {/* <div className="grid grid-cols-2">
-                  <p className="text-sm font-bold">Mokinių įvertinimas:</p>
-                  <p className="text-sm">{tutor.rating}</p>
-                </div> */}
-
-                <div className="flex items-center">
-                  <svg
-                    className="me-1 h-4 w-4 text-yellow-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <p className="ms-2 text-sm font-bold">4.95</p>
-                  <span className="mx-1.5 h-1 w-1 rounded-full"></span>
-                  <a href="#" className="text-sm font-medium underline">
-                    73 Atsiliepimų
-                  </a>
+                  <p className="text-sm">
+                    {tutor.studyTypes.map((type) => type.studyType).join(", ")}
+                  </p>
                 </div>
               </div>
 
@@ -99,7 +73,42 @@ export default async function Page() {
       </div>
 
       <div className="mt-16">
-        <h2 className="text-3xl font-bold">Susirask korepetitorių</h2>
+        <h2 className="mb-8 text-3xl font-bold">Susirask korepetitorių</h2>
+        <table className="border-separate border border-black shadow-sharp [border-spacing:0.75rem]">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Subjects</th>
+              <th>Languages</th>
+              <th>Study Types</th>
+              <th>Hourly Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tutors.map((tutor) => (
+              <tr>
+                <td>{tutor.name}</td>
+                <td>{tutor.description}</td>
+                <td>
+                  {tutor.subjects
+                    .map((subject) => subjects[subject.subjectId - 1]?.name)
+                    .join(", ")}
+                </td>
+                <td>
+                  {tutor.languages
+                    .map((language) => language.language)
+                    .join(", ")}
+                </td>
+                <td>
+                  {tutor.studyTypes.map((type) => type.studyType).join(", ")}
+                </td>
+                <td>{tutor.pricePerHour}</td>
+                <td>Rezervuoti</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
