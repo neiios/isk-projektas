@@ -12,6 +12,9 @@ ISK; Komandos: Trojos Arklys projektas
 # install nodejs 20
 nvm install --lts
 
+#set node version
+nvm use 20.10.0
+
 # install pnpm
 iwr https://get.pnpm.io/install.ps1 -useb | iex
 
