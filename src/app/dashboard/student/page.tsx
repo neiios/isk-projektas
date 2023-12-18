@@ -87,10 +87,12 @@ export default async function Page() {
                   <p>Valandos kaina:</p>
                   <p>{tutor.pricePerHour} Eur</p>
                 </div>
-                <CancelReservationButton
-                  reservationId={reservation.id}
-                  handleCancel={handleReservatiuonCancel}
-                />
+                {reservation.approved !== 1 ? (
+                  <CancelReservationButton
+                    reservationId={reservation.id}
+                    handleCancel={handleReservatiuonCancel}
+                  />
+                ) : null}
               </div>
             );
           })}

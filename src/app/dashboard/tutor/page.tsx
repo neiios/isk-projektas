@@ -77,66 +77,74 @@ export default async function Page() {
   return (
     <>
       <h1 className="mb-12 text-5xl font-extrabold">Sveiki, {user.name}!</h1>
-      <h2 className="mb-8 text-3xl">
-        Some students want to reserve a lesson with you!
-      </h2>
-      {reservationsData.map((reservation) => (
-        <div
-          className="flex flex-col gap-8 border border-black p-16 shadow-sharp"
-          key={reservation.id}
-        >
-          <div className="flex items-center justify-center gap-4">
-            {reservation.student.image ? (
-              <Image
-                src={reservation.student.image}
-                alt={`${reservation.student.name} Profilio Nuotrauka`}
-                width={64}
-                height={64}
-                className="rounded-full"
-              ></Image>
-            ) : (
-              <div className="relative inline-flex h-[64px] w-[64px] items-center justify-center overflow-hidden rounded-full border border-black">
-                <span className="font-medium">
-                  {getInitials(reservation.student.name)}
-                </span>
+      {reservationsData.length === 0 ? (
+        <h2 className="mb-8 text-3xl">
+          Kol kas nėra rezervacijų. Pasitikrinkite vėliau!
+        </h2>
+      ) : (
+        <>
+          <h2 className="mb-8 text-3xl">
+            Some students want to reserve a lesson with you!
+          </h2>
+          {reservationsData.map((reservation) => (
+            <div
+              className="flex flex-col gap-8 border border-black p-16 shadow-sharp"
+              key={reservation.id}
+            >
+              <div className="flex items-center justify-center gap-4">
+                {reservation.student.image ? (
+                  <Image
+                    src={reservation.student.image}
+                    alt={`${reservation.student.name} Profilio Nuotrauka`}
+                    width={64}
+                    height={64}
+                    className="rounded-full"
+                  ></Image>
+                ) : (
+                  <div className="relative inline-flex h-[64px] w-[64px] items-center justify-center overflow-hidden rounded-full border border-black">
+                    <span className="font-medium">
+                      {getInitials(reservation.student.name)}
+                    </span>
+                  </div>
+                )}
+                <h3 className="text-2xl">{reservation.student.name}</h3>
               </div>
-            )}
-            <h3 className="text-2xl">{reservation.student.name}</h3>
-          </div>
 
-          <ul className="list-disc">
-            <li>El. paštas: {reservation.student.email}</li>
-            <li>Telefono numeris: {reservation.student.phoneNumber}</li>
-            <li>Pažymių vidurkis: {reservation.student.averageGrade}</li>
-            <li>Mokosi {reservation.student.studyYear} klasėje</li>
-            <li>
-              Rezervacija yra patvirtinta:{" "}
-              {reservation.approved === 1 ? "Taip" : "Ne"}
-            </li>
-          </ul>
+              <ul className="list-disc">
+                <li>El. paštas: {reservation.student.email}</li>
+                <li>Telefono numeris: {reservation.student.phoneNumber}</li>
+                <li>Pažymių vidurkis: {reservation.student.averageGrade}</li>
+                <li>Mokosi {reservation.student.studyYear} klasėje</li>
+                <li>
+                  Rezervacija yra patvirtinta:{" "}
+                  {reservation.approved === 1 ? "Taip" : "Ne"}
+                </li>
+              </ul>
 
-          <div className="flex gap-4">
-            {reservation.approved === 0 ? (
-              <ApproveReservationButton
-                approveReservation={approveReservation}
-                reservationId={reservation.id}
-              />
-            ) : null}
+              <div className="flex gap-4">
+                {reservation.approved === 0 ? (
+                  <ApproveReservationButton
+                    approveReservation={approveReservation}
+                    reservationId={reservation.id}
+                  />
+                ) : null}
 
-            {reservation.approved === 1 ? (
-              <CompleteReservationButton
-                completeReservation={completeReservation}
-                reservationId={reservation.id}
-              />
-            ) : null}
+                {reservation.approved === 1 ? (
+                  <CompleteReservationButton
+                    completeReservation={completeReservation}
+                    reservationId={reservation.id}
+                  />
+                ) : null}
 
-            <CancelReservationButton
-              handleCancel={handleReservationCancel}
-              reservationId={reservation.id}
-            />
-          </div>
-        </div>
-      ))}
+                <CancelReservationButton
+                  handleCancel={handleReservationCancel}
+                  reservationId={reservation.id}
+                />
+              </div>
+            </div>
+          ))}
+        </>
+      )}
     </>
   );
 }
