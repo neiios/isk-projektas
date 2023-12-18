@@ -28,6 +28,9 @@ export const reservationsRouter = createTRPCRouter({
   getTutorReservations: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.reservations.findMany({
       where: eq(reservations.tutorId, ctx.session.user.id),
+      with: {
+        student: true,
+      },
     });
   }),
 });

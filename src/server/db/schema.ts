@@ -103,6 +103,17 @@ export const usersRelationsMany = relations(users, ({ many }) => ({
   subjects: many(userSubjects),
 }));
 
+export const reservationsRelations = relations(reservations, ({ one }) => ({
+  student: one(users, {
+    fields: [reservations.studentId],
+    references: [users.id],
+  }),
+  tutor: one(users, {
+    fields: [reservations.tutorId],
+    references: [users.id],
+  }),
+}));
+
 /// OAUTH
 
 export const accounts = mysqlTable(
