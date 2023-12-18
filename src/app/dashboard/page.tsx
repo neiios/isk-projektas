@@ -10,9 +10,6 @@ export default async function Page() {
     redirect("/404");
   }
 
-  // change for testing
-  user.accountType = "student";
-
   if (!session) {
     redirect("/api/auth/signin");
   } else if (user.accountType === null) {
