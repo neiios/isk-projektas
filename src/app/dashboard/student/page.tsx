@@ -9,6 +9,7 @@ import { api } from "~/trpc/server";
 import { getInitials } from "~/utils/helpers";
 
 import { reservations as reservationsTable } from "~/server/db/schema";
+import Link from "next/link";
 
 export default async function Page() {
   const session = await getServerAuthSession();
@@ -144,45 +145,17 @@ export default async function Page() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="mt-16">
-        <h2 className="mb-8 text-3xl font-bold">Susirask korepetitorių</h2>
-        <table className="border-separate border border-black shadow-sharp [border-spacing:0.75rem]">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Subjects</th>
-              <th>Languages</th>
-              <th>Study Types</th>
-              <th>Hourly Rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tutors.map((tutor) => (
-              <tr key={tutor.id}>
-                <td>{tutor.name}</td>
-                <td>{tutor.description}</td>
-                <td>
-                  {tutor.subjects
-                    .map((subject) => subjects[subject.subjectId - 1]?.name)
-                    .join(", ")}
-                </td>
-                <td>
-                  {tutor.languages
-                    .map((language) => language.language)
-                    .join(", ")}
-                </td>
-                <td>
-                  {tutor.studyTypes.map((type) => type.studyType).join(", ")}
-                </td>
-                <td>{tutor.pricePerHour}</td>
-                <td>Rezervuoti</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="mt-16 flex flex-col items-center">
+          <h2 className="mb-8 text-3xl font-bold">
+            Not finding what you need?
+          </h2>
+          <Link
+            className="border border-black px-16 py-6 shadow-sharp"
+            href="/dashboard/student/filter"
+          >
+            Try advanced search
+          </Link>
+        </div>
       </div>
     </div>
   );
