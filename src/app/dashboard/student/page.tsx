@@ -83,6 +83,10 @@ export default async function Page() {
                   <p>Telefono numeris:</p>
                   <p>{tutor.phoneNumber}</p>
                 </div>
+                <div className="flex justify-between gap-2">
+                  <p>Valandos kaina:</p>
+                  <p>{tutor.pricePerHour} Eur</p>
+                </div>
                 <CancelReservationButton
                   reservationId={reservation.id}
                   handleCancel={handleReservatiuonCancel}
@@ -130,6 +134,10 @@ export default async function Page() {
                   <p className="text-sm">
                     {tutor.studyTypes.map((type) => type.studyType).join(", ")}
                   </p>
+                </div>
+                <div className="grid grid-cols-2">
+                  <p className="text-sm font-bold">Valandos kaina:</p>
+                  <p className="text-sm">{tutor.pricePerHour} Eur</p>
                 </div>
               </div>
 
