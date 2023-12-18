@@ -1,14 +1,86 @@
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getServerAuthSession } from "~/server/auth";
+import { db } from "~/server/db";
+import {
+  userLanguages,
+  userStudyTypes,
+  userSubjects,
+  users,
+} from "~/server/db/schema";
 import { api } from "~/trpc/server";
 
 export default async function Page() {
+  const session = await getServerAuthSession();
+  if (session === null) {
+    redirect("/api/auth/signin");
+  }
+
   async function handleSubmit(formData: FormData) {
     "use server";
-    console.log(formData.getAll("subjects"));
+
+    if (session === null) {
+      redirect("/api/auth/signin");
+    }
+
+    await db
+      .update(users)
+      .set({
+        name: formData.get("name")?.toString() ?? "",
+        email: formData.get("email")?.toString(),
+        phoneNumber: formData.get("phoneNumber")?.toString(),
+        studyYear: parseInt(formData.get("studyYear")?.toString() ?? "0"),
+        averageGrade: parseFloat(
+          formData.get("averageGrade")?.toString() ?? "0",
+        ),
+        accountType: "student",
+      })
+      .where(eq(users.id, session.user.id));
+
+    const userSubjectsData = formData.getAll("subjects").map((subjectId) => ({
+      userId: session.user.id,
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      subjectId: parseInt(subjectId.toString()),
+    }));
+
+    await db
+      .delete(userSubjects)
+      .where(eq(userSubjects.userId, session.user.id));
+    await db.insert(userSubjects).values(userSubjectsData);
+
+    type StudyType = "Kontaktiniu" | "Nuotoliu";
+
+    const userStudyTypesData = formData.getAll("studyTypes").map((st) => ({
+      userId: session.user.id,
+      studyType: st as StudyType,
+    }));
+
+    await db
+      .delete(userStudyTypes)
+      .where(eq(userStudyTypes.userId, session.user.id));
+    await db.insert(userStudyTypes).values(userStudyTypesData);
+
+    type AvailableLanguages = "Lietuvių" | "Anglų" | "Rusų" | "Lenkų";
+
+    const userLanguagesData = formData.getAll("languages").map((language) => ({
+      userId: session.user.id,
+      language: language as AvailableLanguages,
+    }));
+
+    await db
+      .delete(userLanguages)
+      .where(eq(userLanguages.userId, session.user.id));
+    await db.insert(userLanguages).values(userLanguagesData);
+
     revalidatePath("/dashboard");
     redirect("/dashboard");
+  }
+
+  const user = await api.users.getUserInfo.query();
+  if (!user) {
+    redirect("/404");
   }
 
   const subjects = await api.subjects.getSubjects.query();
@@ -26,15 +98,26 @@ export default async function Page() {
         >
           <div className="grid grid-cols-2 gap-4">
             <input
+              required
               type="text"
               name="name"
               placeholder="Name"
+              defaultValue={user.name}
+              className="border border-black px-4 py-2"
+            />
+            <input
+              required
+              type="email"
+              name="email"
+              placeholder="Email"
+              defaultValue={user.email}
               className="border border-black px-4 py-2"
             />
             <select
+              required
               name="subjects"
-              className="row-span-5 border border-black bg-white px-4 py-2"
-              defaultValue=""
+              className="row-span-4 border border-black bg-white px-4 py-2"
+              defaultValue={[""]}
               multiple
             >
               <option value="" disabled>
@@ -46,27 +129,59 @@ export default async function Page() {
                 </option>
               ))}
             </select>
+            <select
+              required
+              name="studyTypes"
+              className="border border-black bg-white px-4 py-2"
+              defaultValue={[""]}
+              multiple
+            >
+              <option value="" disabled>
+                Select study types
+              </option>
+              <option value="Kontaktiniu">Kontaktiniu</option>
+              <option value="Nuotoliu">Nuotoliu</option>
+            </select>
+
+            <select
+              required
+              name="languages"
+              className="row-span-2 border border-black bg-white px-4 py-2"
+              defaultValue={[""]}
+              multiple
+            >
+              <option value="" disabled>
+                Select your languages
+              </option>
+              <option value="Lietuvių">Lietuvių</option>
+              <option value="Anglų">Anglų</option>
+              <option value="Rusų">Rusų</option>
+              <option value="Lenkų">Lenkų</option>
+            </select>
+
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="border border-black px-4 py-2"
-            />
-            <input
+              required
               type="tel"
               name="phoneNumber"
               placeholder="Phone Number"
+              defaultValue={user.phoneNumber ?? ""}
               className="border border-black px-4 py-2"
             />
             <input
-              type="text"
+              required
+              type="number"
               name="studyYear"
+              min={0}
+              max={12}
               placeholder="Study Year"
               className="border border-black px-4 py-2"
             />
             <input
-              type="text"
+              required
+              type="number"
               name="averageGrade"
+              min={0}
+              max={10}
               placeholder="Average Grade"
               className="border border-black px-4 py-2"
             />
