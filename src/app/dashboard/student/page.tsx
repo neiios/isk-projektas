@@ -1,9 +1,14 @@
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import CancelReservationButton from "~/app/_components/cancel-reservation-button";
 import TutorCard from "~/app/_components/tutor-card";
 import { getServerAuthSession } from "~/server/auth";
+import { db } from "~/server/db";
 import { api } from "~/trpc/server";
 import { getInitials } from "~/utils/helpers";
+
+import { reservations as reservationsTable } from "~/server/db/schema";
 
 export default async function Page() {
   const session = await getServerAuthSession();
@@ -14,13 +19,28 @@ export default async function Page() {
   }
 
   const tutors = await api.users.getAvailableTutors.query(); // TODO: filter reserved tutors
-  const threeFirst = tutors.slice(0, 3);
   const subjects = await api.subjects.getSubjects.query();
   const reservations = await api.reservations.getStudentReservations.query();
+  const reservedTutorIds = reservations.map(
+    (reservation) => reservation.tutorId,
+  );
+  const filteredTutors = tutors.filter(
+    (tutor) => !reservedTutorIds.includes(tutor.id),
+  );
+  const threeFirst = filteredTutors.slice(0, 3);
 
   async function handleFastReservation(tutorId: string) {
     "use server";
     await api.reservations.addReservation.query({ tutorId: tutorId });
+    revalidatePath("/dashboard/student");
+    redirect("/dashboard/student");
+  }
+
+  async function handleReservatiuonCancel(reservationId: number) {
+    "use server";
+    await db
+      .delete(reservationsTable)
+      .where(eq(reservationsTable.id, reservationId));
     revalidatePath("/dashboard/student");
     redirect("/dashboard/student");
   }
@@ -31,11 +51,45 @@ export default async function Page() {
 
       <div>
         <h2 className="mb-8 text-3xl font-bold">Rezervuotos pamokos</h2>
-        {reservations.map((reservation) => (
-          <div key={reservation.id}>
-            <p>{reservation.tutorId}</p>
-          </div>
-        ))}
+        <div className="flex gap-8">
+          {reservations.map((reservation) => {
+            const tutor = tutors.find(
+              (tutor) => tutor.id === reservation.tutorId,
+            );
+            if (!tutor) return null;
+            return (
+              <div
+                key={tutor.id}
+                className="flex flex-col gap-2 border border-black p-4 shadow-sharp"
+              >
+                <div className="mb-8 flex items-center justify-center gap-4">
+                  <div className="relative inline-flex h-[64px] w-[64px] items-center justify-center overflow-hidden rounded-full border border-black">
+                    <span className="font-medium">
+                      {getInitials(tutor.name)}
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold">{tutor.name}</p>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <p>Rezervacija patvirtinta:</p>
+                  <p>{reservation.approved === 1 ? "Taip" : "Ne"}</p>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <p>El. paštas:</p>
+                  <p>{tutor.email}</p>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <p>Telefono numeris:</p>
+                  <p>{tutor.phoneNumber}</p>
+                </div>
+                <CancelReservationButton
+                  reservationId={reservation.id}
+                  handleCancel={handleReservatiuonCancel}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div>
