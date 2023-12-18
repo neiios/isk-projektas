@@ -28,7 +28,7 @@ export default async function Page() {
         />
         <SetupCard
           title="Tėvas"
-          href="/dashboard/setup/parent"
+          href="/dashboard/setup/student"
           icon={<RiParentFill size={128} />}
         />
       </div>
