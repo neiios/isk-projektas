@@ -1,10 +1,16 @@
 import "~/styles/globals.css";
 
+import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import Header from "./_components/header";
 import Footer from "./_components/footer";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata = {
   title: "Korepetitorių platforma",
@@ -19,7 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col justify-between">
+      <body
+        className={`font-sans ${inter.variable} flex min-h-screen flex-col justify-between`}
+      >
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header></Header>
           <main className="mx-auto flex max-w-7xl flex-col items-center justify-between px-4">
