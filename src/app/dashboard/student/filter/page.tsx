@@ -5,17 +5,17 @@ export default async function Page() {
   const subjects = await api.subjects.getSubjects.query();
 
   return (
-    <div className="mt-16">
+    <div className="mt-16 text-center">
       <h2 className="mb-8 text-3xl font-bold">Susirask korepetitorių</h2>
       <table className="border-separate border border-black shadow-sharp [border-spacing:0.75rem]">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Subjects</th>
-            <th>Languages</th>
-            <th>Study Types</th>
-            <th>Hourly Rate</th>
+            <th>Korepetitorius</th>
+            <th>Aprašas</th>
+            <th>Mokomi dalykai</th>
+            <th>Kalbos</th>
+            <th>Mokymo būdai</th>
+            <th>Įkainis (€/h)</th>
           </tr>
           <tr>
             <form action="">

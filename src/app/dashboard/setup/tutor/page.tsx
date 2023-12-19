@@ -87,7 +87,7 @@ export default async function Page() {
     <div className="flex max-w-2xl flex-col items-center gap-24 border border-black p-8 shadow-sharp md:p-16">
       <div className="flex flex-col items-center justify-center gap-16">
         <h1 className="text-3xl font-extrabold md:text-5xl">
-          Tutor setup page
+          Registracija mokytojui
         </h1>
 
         <form
@@ -99,7 +99,7 @@ export default async function Page() {
               required
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Tavo vardas ir pavardė"
               defaultValue={user.name}
               className="border border-black px-4 py-2"
             />
@@ -107,7 +107,7 @@ export default async function Page() {
               required
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="El. paštas"
               defaultValue={user.email}
               className="border border-black px-4 py-2"
             />
@@ -119,7 +119,7 @@ export default async function Page() {
               multiple
             >
               <option value="" disabled>
-                Select study subjects
+                Pasirink mokomus dalykus
               </option>
               {subjects.map((subject) => (
                 <option key={subject.id} value={subject.id}>
@@ -133,7 +133,7 @@ export default async function Page() {
               type="number"
               name="pricePerHour"
               min={0}
-              placeholder="Price per hour"
+              placeholder="Įkainis (€/h)"
               className="border border-black px-4 py-2"
             />
 
@@ -145,7 +145,7 @@ export default async function Page() {
               multiple
             >
               <option value="" disabled>
-                Select study types
+                Pasirink mokymo būdus
               </option>
               <option value="Kontaktiniu">Kontaktiniu</option>
               <option value="Nuotoliu">Nuotoliu</option>
@@ -159,7 +159,7 @@ export default async function Page() {
               multiple
             >
               <option value="" disabled>
-                Select your languages
+                Pasirink kalbas
               </option>
               <option value="Lietuvių">Lietuvių</option>
               <option value="Anglų">Anglų</option>
@@ -170,7 +170,7 @@ export default async function Page() {
             <textarea
               required
               name="description"
-              placeholder="Description"
+              placeholder="Trumpas aprašas apie Tave"
               rows={4}
               cols={30}
               className="border border-black px-4 py-2"
@@ -182,10 +182,10 @@ export default async function Page() {
               href="/dashboard"
               className="border border-black px-16 py-4 font-bold shadow-sharp"
             >
-              Go Back
+              Grįžti atgal
             </Link>
             <button className="border border-black px-16 py-4 font-bold shadow-sharp">
-              Submit
+              Baigti registraciją
             </button>
           </div>
         </form>

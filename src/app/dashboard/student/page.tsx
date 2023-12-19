@@ -157,13 +157,13 @@ export default async function Page() {
         </div>
         <div className="mt-16 flex flex-col items-center">
           <h2 className="mb-8 text-3xl font-bold">
-            Not finding what you need?
+            Nerandi tinkamo korepetitoriaus?
           </h2>
           <Link
             className="border border-black px-16 py-6 shadow-sharp"
             href="/dashboard/student/filter"
           >
-            Try advanced search
+            Išbandyk išplėstinę paiešką!
           </Link>
         </div>
       </div>

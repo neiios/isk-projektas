@@ -48,13 +48,13 @@ export default async function Page() {
           )}
           <p className="text-lg font-bold">{userInfo.name}</p>
         </div>
-        <h2 className="text-3xl font-bold">Your Info</h2>
+        <h2 className="text-3xl font-bold">Profilio informacija</h2>
         <p className="text-lg font-bold">
-          Email:{" "}
+          El. paštas:{" "}
           <span className="font-normal text-black">{userInfo.email}</span>
         </p>
         <p className="text-lg font-bold">
-          Account Type:{" "}
+          Paskyros tipas:{" "}
           <span className="font-normal text-black">
             {userInfo.accountType ?? "Unset"}
           </span>
@@ -72,7 +72,7 @@ export default async function Page() {
           </span>
         </p> */}
         <p className="text-lg font-bold">
-          Subjects you want to study:{" "}
+          Dominantys dalykai:{" "}
           <span className="font-normal text-black">
             {userSubjectsNames.join(", ") ?? "Unset"}
           </span>

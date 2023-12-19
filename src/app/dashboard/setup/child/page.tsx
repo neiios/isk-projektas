@@ -17,7 +17,7 @@ export default async function ChildSetupPage() {
         href="/dashboard"
         className="border border-black px-16 py-8 font-bold shadow-sharp"
       >
-        Go Back
+        Grįžti atgal
       </Link>
     </div>
   );

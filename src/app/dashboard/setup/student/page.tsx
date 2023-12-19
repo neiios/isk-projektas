@@ -89,7 +89,7 @@ export default async function Page() {
     <div className="flex max-w-2xl flex-col items-center gap-24 border border-black p-8 shadow-sharp md:p-16">
       <div className="flex flex-col items-center justify-center gap-16">
         <h1 className="text-3xl font-extrabold md:text-5xl">
-          Student setup page
+          Registracija mokiniui
         </h1>
 
         <form
@@ -101,7 +101,7 @@ export default async function Page() {
               required
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Tavo vardas ir pavardė"
               defaultValue={user.name}
               className="border border-black px-4 py-2"
             />
@@ -109,7 +109,7 @@ export default async function Page() {
               required
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="El. paštas"
               defaultValue={user.email}
               className="border border-black px-4 py-2"
             />
@@ -121,7 +121,7 @@ export default async function Page() {
               multiple
             >
               <option value="" disabled>
-                Select study subjects
+                Pasirink dominančius dalykus
               </option>
               {subjects.map((subject) => (
                 <option key={subject.id} value={subject.id}>
@@ -137,7 +137,7 @@ export default async function Page() {
               multiple
             >
               <option value="" disabled>
-                Select study types
+                Pasirink mokymosi būdus
               </option>
               <option value="Kontaktiniu">Kontaktiniu</option>
               <option value="Nuotoliu">Nuotoliu</option>
@@ -151,7 +151,7 @@ export default async function Page() {
               multiple
             >
               <option value="" disabled>
-                Select your languages
+                Pasirink kalbas
               </option>
               <option value="Lietuvių">Lietuvių</option>
               <option value="Anglų">Anglų</option>
@@ -163,7 +163,7 @@ export default async function Page() {
               required
               type="tel"
               name="phoneNumber"
-              placeholder="Phone Number"
+              placeholder="Telefono numeris"
               defaultValue={user.phoneNumber ?? ""}
               className="border border-black px-4 py-2"
             />
@@ -173,7 +173,7 @@ export default async function Page() {
               name="studyYear"
               min={0}
               max={12}
-              placeholder="Study Year"
+              placeholder="Klasė"
               className="border border-black px-4 py-2"
             />
             <input
@@ -182,7 +182,7 @@ export default async function Page() {
               name="averageGrade"
               min={0}
               max={10}
-              placeholder="Average Grade"
+              placeholder="Apytikslis pažymių vidurkis"
               className="border border-black px-4 py-2"
             />
           </div>
@@ -192,10 +192,10 @@ export default async function Page() {
               href="/dashboard"
               className="border border-black px-16 py-4 font-bold shadow-sharp"
             >
-              Go Back
+              Grįžti atgal
             </Link>
             <button className="border border-black px-16 py-4 font-bold shadow-sharp">
-              Submit
+              Baigti registraciją
             </button>
           </div>
         </form>

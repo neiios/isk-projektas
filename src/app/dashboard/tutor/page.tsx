@@ -84,7 +84,7 @@ export default async function Page() {
       ) : (
         <>
           <h2 className="mb-8 text-3xl">
-            Some students want to reserve a lesson with you!
+            Jūs turite naują rezervaciją!
           </h2>
           {reservationsData.map((reservation) => (
             <div
