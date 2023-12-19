@@ -17,7 +17,7 @@ export default async function Header() {
       />
       </Link> }
       {/* TODO: make a fancier menu on mobile */}
-      <div className="flex flex-col md:flex-row md:gap-8">
+      <div className="flex flex-col md:flex-row md:gap-8 pt-2 pb-2">
         {session ? (
           <>
             <Link href="/dashboard">Pagr. puslapis</Link>
