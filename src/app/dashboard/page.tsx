@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -7,7 +7,7 @@ export default async function Page() {
 
   const user = await api.users.getUserInfo.query();
   if (!user) {
-    redirect("/404");
+    return notFound();
   }
 
   if (!session) {
@@ -20,5 +20,5 @@ export default async function Page() {
     redirect("/dashboard/tutor");
   }
 
-  redirect("/404");
+  return notFound();
 }

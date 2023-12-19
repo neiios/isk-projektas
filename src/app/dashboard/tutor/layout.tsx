@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { api } from "~/trpc/server";
 
 export default async function Layout({
@@ -8,7 +8,7 @@ export default async function Layout({
 }) {
   const user = await api.users.getUserInfo.query();
   if (!user) {
-    redirect("/404");
+    return notFound();
   }
   if (user.accountType !== "tutor") {
     redirect("/dashboard");

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
 import {
@@ -78,7 +78,7 @@ export default async function Page() {
 
   const user = await api.users.getUserInfo.query();
   if (!user) {
-    redirect("/404");
+    return notFound();
   }
 
   const subjects = await api.subjects.getSubjects.query();
@@ -180,11 +180,11 @@ export default async function Page() {
           <div className="flex gap-4">
             <Link
               href="/dashboard"
-              className="border border-black px-16 py-4 font-bold shadow-sharp bg-white"
+              className="border border-black bg-white px-16 py-4 font-bold shadow-sharp"
             >
               Grįžti atgal
             </Link>
-            <button className="border border-black px-16 py-4 font-bold shadow-sharp bg-white">
+            <button className="border border-black bg-white px-16 py-4 font-bold shadow-sharp">
               Baigti registraciją
             </button>
           </div>

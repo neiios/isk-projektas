@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import CancelReservationButton from "~/app/_components/cancel-reservation-button";
 import ReservationButton from "~/app/_components/reservation-button";
 import { getServerAuthSession } from "~/server/auth";
@@ -16,7 +16,7 @@ export default async function Page() {
 
   const user = await api.users.getUserInfo.query();
   if (!user) {
-    redirect("/404");
+    return notFound();
   }
 
   const tutors = await api.users.getAvailableTutors.query(); // TODO: filter reserved tutors
@@ -160,7 +160,7 @@ export default async function Page() {
             Nerandi tinkamo korepetitoriaus?
           </h2>
           <Link
-            className="border border-black px-16 py-6 shadow-sharp bg-white font-bold"
+            className="border border-black bg-white px-16 py-6 font-bold shadow-sharp"
             href="/dashboard/student/filter"
           >
             Išbandyk išplėstinę paiešką!

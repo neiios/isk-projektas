@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import Image from "next/image";
@@ -15,14 +15,14 @@ export default async function Page() {
   const session = await getServerAuthSession();
   const user = await api.users.getUserInfo.query();
   if (!user) {
-    redirect("/404");
+    return notFound();
   }
 
   async function approveReservation(reservationId: number) {
     "use server";
 
     if (!session) {
-      redirect("/404");
+      return notFound();
     }
 
     await db
@@ -52,7 +52,7 @@ export default async function Page() {
     "use server";
 
     if (!session) {
-      redirect("/404");
+      return notFound();
     }
 
     await db
@@ -83,9 +83,7 @@ export default async function Page() {
         </h2>
       ) : (
         <>
-          <h2 className="mb-8 text-3xl">
-            Jūs turite naują rezervaciją!
-          </h2>
+          <h2 className="mb-8 text-3xl">Jūs turite naują rezervaciją!</h2>
           {reservationsData.map((reservation) => (
             <div
               className="flex flex-col gap-8 border border-black p-16 shadow-sharp"

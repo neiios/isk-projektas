@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import StudentProfile from "../_components/student-profile";
@@ -21,6 +21,6 @@ export default async function Page() {
   } else if (userInfo.accountType === "student") {
     return <StudentProfile />;
   } else {
-    redirect("/404");
+    return notFound();
   }
 }
