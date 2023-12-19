@@ -67,6 +67,18 @@ export const reservations = mysqlTable("reservation", {
   updatedAt: timestamp("updatedAt").onUpdateNow(),
 });
 
+export const reviews = mysqlTable("review", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  leftById: varchar("leftById", { length: 255 }).notNull(),
+  leftForId: varchar("leftForId", { length: 255 }).notNull(),
+  rating: int("rating").notNull(),
+  comment: text("comment"),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+});
+
 export const subjectsRelations = relations(subjects, ({ many }) => ({
   userSubjects: many(userSubjects),
 }));
@@ -101,6 +113,18 @@ export const usersRelationsMany = relations(users, ({ many }) => ({
   languages: many(userLanguages),
   studyTypes: many(userStudyTypes),
   subjects: many(userSubjects),
+  reviews: many(reviews),
+}));
+
+export const reviewsRelations = relations(reviews, ({ one }) => ({
+  leftBy: one(users, {
+    fields: [reviews.leftById],
+    references: [users.id],
+  }),
+  leftFor: one(users, {
+    fields: [reviews.leftForId],
+    references: [users.id],
+  }),
 }));
 
 export const reservationsRelations = relations(reservations, ({ one }) => ({
