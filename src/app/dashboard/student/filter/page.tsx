@@ -137,7 +137,7 @@ export default async function Page({
               </td>
               <td>{tutor.pricePerHour}</td>
               <td>
-                <button className="border border-black p-2 shadow-sharp">
+                <button className="border border-black p-2 shadow-sharp bg-white">
                   Rezervuoti
                 </button>
               </td>

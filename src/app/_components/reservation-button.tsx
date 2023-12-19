@@ -15,7 +15,7 @@ export default function ReservationButton({
         e.preventDefault();
         await handleReservation(tutorId);
       }}
-      className="border border-black px-8 py-2 font-bold shadow-sharp"
+      className="border border-black px-8 py-2 font-bold shadow-sharp bg-white"
     >
       Rezervuoti
     </button>
