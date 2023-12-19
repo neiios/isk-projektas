@@ -118,7 +118,7 @@ export default async function Page({
           </tr>
         </thead>
         <tbody>
-          {tutors.map((tutor) => (
+          {filteredTutors.map((tutor) => (
             <tr key={tutor.id}>
               <td>{tutor.name}</td>
               <td>{tutor.description}</td>
@@ -137,9 +137,10 @@ export default async function Page({
               </td>
               <td>{tutor.pricePerHour}</td>
               <td>
-                <button className="border border-black p-2 shadow-sharp bg-white">
-                  Rezervuoti
-                </button>
+                <ReservationButton
+                  handleReservation={handleReservation}
+                  tutorId={tutor.id}
+                />
               </td>
             </tr>
           ))}
