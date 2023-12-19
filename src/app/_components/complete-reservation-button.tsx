@@ -13,9 +13,9 @@ export function CompleteReservationButton({
         e.preventDefault();
         await completeReservation(reservationId);
       }}
-      className="border border-black p-4 font-bold shadow-sharp"
+      className="border border-black p-4 font-bold shadow-sharp bg-white"
     >
-      Complete Reservation
+      Baigti rezervacija
     </button>
   );
 }
