@@ -149,7 +149,7 @@ export default async function Page() {
               </div>
 
               <ReservationButton
-                handleFastReservation={handleFastReservation}
+                handleReservation={handleFastReservation}
                 tutorId={tutor.id}
               ></ReservationButton>
             </div>
