@@ -14,16 +14,16 @@ export default async function Header() {
       <div className="flex flex-col md:flex-row md:gap-8">
         {session ? (
           <>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link href="/profile">Profile</Link>
-            <Link href="/api/auth/signout">Sign Out</Link>
+            <Link href="/dashboard">Pagr. puslapis</Link>
+            <Link href="/profile">Profilis</Link>
+            <Link href="/api/auth/signout">Atsijungti</Link>
           </>
         ) : (
           <Link
             href="/api/auth/signin"
             className="border border-black px-8 py-4 font-bold shadow-sharp"
           >
-            Sign in
+            Prisijungti
           </Link>
         )}
       </div>
