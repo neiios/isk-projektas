@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
-import Image from "next/image";
 import { api } from "~/trpc/server";
-import { getInitials } from "~/utils/helpers";
 import StudentProfile from "../_components/student-profile";
+import TutorProfile from "../_components/tutor-profile";
 
 export default async function Page() {
   const session = await getServerAuthSession();
@@ -18,12 +17,10 @@ export default async function Page() {
   }
 
   if (userInfo.accountType === "tutor") {
-    return <div>Not implemented</div>;
-  }
-
-  if (userInfo.accountType === "student") {
+    return <TutorProfile />;
+  } else if (userInfo.accountType === "student") {
     return <StudentProfile />;
+  } else {
+    redirect("/404");
   }
-
-  redirect("/404");
 }
