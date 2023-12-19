@@ -6,13 +6,13 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { getInitials } from "~/utils/helpers";
 
-export default async function StudentProfile() {
+export default async function TutorProfile() {
   const session = await getServerAuthSession();
   if (!session) {
     redirect("/api/auth/signin");
   }
 
-  const studentInfo = await db.query.users.findFirst({
+  const tutor = await db.query.users.findFirst({
     where: eq(users.id, session.user.id),
     with: {
       subjects: {
@@ -25,80 +25,79 @@ export default async function StudentProfile() {
     },
   });
 
-  if (!studentInfo) {
+  if (!tutor) {
     console.error("No user found in db");
     return <div>Something went wrong</div>;
   }
 
-  if (!(studentInfo.accountType === "student")) {
+  if (!(tutor.accountType === "tutor")) {
     redirect("/dashboard");
   }
 
   return (
     <>
-      <h1 className="mb-20 text-5xl font-extrabold">
-        Sveiki, {studentInfo.name}!
-      </h1>
+      <h1 className="mb-20 text-5xl font-extrabold">Sveiki, {tutor.name}!</h1>
       <div className="flex flex-col items-center justify-center gap-8 border border-black p-16 shadow-sharp">
         <div className="flex items-center justify-center gap-4">
-          {studentInfo.image ? (
+          {tutor.image ? (
             <Image
-              src={studentInfo.image}
-              alt={`${studentInfo.name} Profilio Nuotrauka`}
+              src={tutor.image}
+              alt={`${tutor.name} Profilio Nuotrauka`}
               width={64}
               height={64}
               className="rounded-full"
             ></Image>
           ) : (
             <div className="relative inline-flex h-[64px] w-[64px] items-center justify-center overflow-hidden rounded-full border border-black">
-              <span className="font-medium">
-                {getInitials(studentInfo.name)}
-              </span>
+              <span className="font-medium">{getInitials(tutor.name)}</span>
             </div>
           )}
-          <p className="text-lg font-bold">{studentInfo.name}</p>
+          <p className="text-lg font-bold">{tutor.name}</p>
         </div>
+
         <h2 className="text-3xl font-bold">Profilio informacija</h2>
 
         <p className="text-lg font-bold">
           El. paštas:{" "}
-          <span className="font-normal text-black">{studentInfo.email}</span>
+          <span className="font-normal text-black">{tutor.email}</span>
         </p>
 
         <p className="text-lg">
           <span className="font-bold">Telefono numeris: </span>
-          {studentInfo.phoneNumber}
+          {tutor.phoneNumber}
         </p>
 
         <p className="text-lg">
-          <span className="font-bold">Pažymių vidurkis: </span>
-          {studentInfo.averageGrade}
+          <span className="font-bold">Valandinis įkainis: </span>
+          {tutor.pricePerHour}
         </p>
 
         <p className="text-lg">
-          <span className="font-bold">Paskyros tipas:</span> Studentas
+          <span className="font-bold">Paskyros tipas: </span>
+          Korepetitorius
         </p>
 
         <p className="max-w-md text-lg">
-          <span className="font-bold">Dominantys dalykai: </span>
-          {studentInfo.subjects
-            .map((subject) => subject.subject.name)
-            .join(", ")}
+          <span className="font-bold">Dalykai, kuriuos mokysite: </span>
+          <p>
+            {tutor.subjects.map((subject) => subject.subject.name).join(", ")}
+          </p>
         </p>
 
         <p className="max-w-md text-lg">
           <span className="font-bold">Kalbos: </span>
-          {studentInfo.languages
-            .map((language) => language.language)
-            .join(", ")}
+          {tutor.languages.map((language) => language.language).join(", ")}
         </p>
 
         <p className="max-w-md text-lg">
           <span className="font-bold">Mokymo būdai: </span>
-          {studentInfo.studyTypes
-            .map((studyType) => studyType.studyType)
-            .join(", ")}
+          {tutor.studyTypes.map((studyType) => studyType.studyType).join(", ")}
         </p>
+
+        <div className="flex max-w-md flex-col items-center justify-center text-lg">
+          <p className="font-bold">Aprašymas: </p>
+          <p>{tutor.description}</p>
+        </div>
       </div>
     </>
   );
