@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { users } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const usersRouter = createTRPCRouter({
   getUserInfo: protectedProcedure.query(({ ctx }) => {
@@ -11,7 +11,7 @@ export const usersRouter = createTRPCRouter({
 
   getAvailableTutors: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.users.findMany({
-      where: eq(users.accountType, "tutor"),
+      where: and(eq(users.accountType, "tutor"), eq(users.isAvailable, 1)),
       with: { languages: true, studyTypes: true, subjects: true },
     });
   }),
