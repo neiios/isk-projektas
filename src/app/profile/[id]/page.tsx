@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   {reviewsData.length === 0 ? (
                     <div>Dėja šis korepetitorius dar neturi atsiliepimų</div>
                   ) : (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 max-w-[400px]">
                       {reviewsData.map((review) => (
                         <div className="flex min-w-[20rem] flex-col items-center justify-center gap-4 border border-black bg-white p-4 text-lg shadow-sharp">
                           <div className="flex items-center justify-center gap-4">
@@ -176,11 +176,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                             </p>
                           </div>
                           <div>
-                            <p className="font-bold">Atsiliepimas: </p>
+                            <p className="font-bold text-center">Atsiliepimas: </p>
                             <p className="text-center">{review.comment}</p>
                           </div>
                           <div>
-                            <p className="font-bold">Įvertinimas: </p>
+                            <p className="font-bold text-center">Įvertinimas: </p>
                             <p className="text-center">{review.rating}</p>
                           </div>
                         </div>
@@ -194,7 +194,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <h3 className="text-2xl font-bold">Palikti atsiliepimą</h3>
                     <p className="max-w-sm text-center">
                       Kadangi turėjai pamokų su šiuo korepetitoriu, gali palikti
-                      atsiliepimą apie jį.
+                      atsiliepimą apie jį:
                     </p>
                     <form
                       action={addReview}
@@ -207,11 +207,14 @@ export default async function Page({ params }: { params: { id: string } }) {
                         cols={30}
                         className="border border-black px-4 py-2 shadow-sharp"
                       />
+                      <p className="max-w-sm text-center">
+                        Palik įvertinimą nuo 1 iki 5:
+                      </p>
                       <input
                         required
                         type="number"
                         name="rating"
-                        placeholder="Penkiabalis įvetinimas"
+                        placeholder="1-5"
                         min={0}
                         max={5}
                         className="border border-black px-4 py-2 shadow-sharp"
