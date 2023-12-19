@@ -11,11 +11,18 @@ export default async function Home() {
         <div className="flex flex-col items-center justify-around">
           <div className="flex flex-col gap-8">
             <h1 className="text-5xl font-extrabold">
-              Lorem ipsum dolor sit amet.
+            Šiuolaikiški korepetitoriai.
+Gerėjantys rezultatai. Emocinis saugumas.
             </h1>
             <h2 className="text-xl">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit,
-              magni.
+              &#10003;
+             Susirask korepetitorių per dieną <br/>
+             &#10003;
+             Išsirink sau tinkamiausią korepetitorių <br/>
+             &#10003;
+             Lankstus grafikų pasirinkimas <br/>
+             &#10003;
+             Skaityk kitų mokinių atsiliepimus <br/>
             </h2>
           </div>
 
