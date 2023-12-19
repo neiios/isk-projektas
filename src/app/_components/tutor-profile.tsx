@@ -37,7 +37,7 @@ export default async function TutorProfile() {
   return (
     <>
       <h1 className="mb-20 text-5xl font-extrabold">Sveiki, {tutor.name}!</h1>
-      <div className="flex flex-col items-center justify-center gap-8 border border-black p-16 shadow-sharp">
+      <div className="flex flex-col items-center justify-center gap-8 border border-black p-16 text-center shadow-sharp">
         <div className="flex items-center justify-center gap-4">
           {tutor.image ? (
             <Image
@@ -77,7 +77,7 @@ export default async function TutorProfile() {
           Korepetitorius
         </p>
 
-        <p className="max-w-md text-lg">
+        <p className="max-w-md text-center text-lg">
           <span className="font-bold">Dalykai, kuriuos mokysite: </span>
           <p>
             {tutor.subjects.map((subject) => subject.subject.name).join(", ")}
