@@ -69,7 +69,12 @@ export default async function Page() {
                       {getInitials(tutor.name)}
                     </span>
                   </div>
-                  <p className="text-lg font-bold">{tutor.name}</p>
+                  <Link
+                    href={`/profile/${tutor.id}`}
+                    className="text-lg font-bold"
+                  >
+                    {tutor.name}
+                  </Link>
                 </div>
 
                 <div>
@@ -115,7 +120,12 @@ export default async function Page() {
                 <div className="relative inline-flex h-[64px] w-[64px] items-center justify-center overflow-hidden rounded-full border border-black">
                   <span className="font-medium">{getInitials(tutor.name)}</span>
                 </div>
-                <p className="text-lg font-bold">{tutor.name}</p>
+                <Link
+                  href={`/profile/${tutor.id}`}
+                  className="text-lg font-bold"
+                >
+                  {tutor.name}
+                </Link>
               </div>
 
               <div>
