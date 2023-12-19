@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import CancelReservationButton from "~/app/_components/cancel-reservation-button";
-import TutorCard from "~/app/_components/tutor-card";
+import ReservationButton from "~/app/_components/reservation-button";
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
 import { api } from "~/trpc/server";
@@ -148,10 +148,10 @@ export default async function Page() {
                 <p className="text-sm">{tutor.description}</p>
               </div>
 
-              <TutorCard
+              <ReservationButton
                 handleFastReservation={handleFastReservation}
                 tutorId={tutor.id}
-              ></TutorCard>
+              ></ReservationButton>
             </div>
           ))}
         </div>
