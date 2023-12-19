@@ -10,9 +10,8 @@ export default async function Home() {
       <div className="flex max-w-5xl flex-col gap-12 md:min-h-[30rem] md:flex-row">
         <div className="flex flex-col items-center justify-around">
           <div className="flex flex-col gap-8">
-            <h1 className="text-5xl font-extrabold">
-            Šiuolaikiški korepetitoriai.
-Gerėjantys rezultatai. Emocinis saugumas.
+            <h1 className="text-4xl font-extrabold">
+            Šiuolaikiški korepetitoriai. Gerėjantys rezultatai. <br/> Išlaikyti kontroliniai.
             </h1>
             <h2 className="text-xl">
               &#10003;
@@ -35,9 +34,9 @@ Gerėjantys rezultatai. Emocinis saugumas.
         </div>
         <div>
           <Image
-            src="https://cataas.com/cat/says/Taip, aš irgi korepetitorius"
-            width={500}
-            height={500}
+             src= "/teacher.png" 
+            width={700}
+            height={700}
             alt="God's fanciest tutor"
           />
         </div>
