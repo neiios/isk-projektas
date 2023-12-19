@@ -107,7 +107,16 @@ export default async function Page({ params }: { params: { id: string } }) {
             </div>
 
             <div className="flex flex-col items-center justify-center text-lg">
-              <p className="font-bold">Paskyros tipas: </p>
+              <p className="font-bold">Dalykų sąrašas: </p>
+              <p>
+                {profile.subjects
+                  .map((subject) => subject.subject.name)
+                  .join(", ")}
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-lg">
+              <p className="font-bold">Kalbų sąrašas: </p>
               <p>
                 {profile.languages
                   .map((language) => language.language)
@@ -116,7 +125,10 @@ export default async function Page({ params }: { params: { id: string } }) {
             </div>
 
             <div className="flex flex-col items-center justify-center text-lg">
-              <p className="font-bold">Paskyros tipas: </p>
+              <p className="font-bold">
+                {profile.accountType === "student" ? "Mokymosi " : "Mokymo "}
+                būdai:
+              </p>
               <p>
                 {profile.studyTypes
                   .map((studyType) => studyType.studyType)
@@ -126,10 +138,10 @@ export default async function Page({ params }: { params: { id: string } }) {
 
             {profile.accountType === "tutor" ? (
               <>
-                <p className="text-center text-lg">
-                  <span className="font-bold">Valandinis įkainis: </span>
-                  {profile.pricePerHour}
-                </p>
+                <div className="text-center text-lg">
+                  <p className="font-bold">Valandinis įkainis: </p>
+                  <p>{profile.pricePerHour} Eur</p>
+                </div>
                 <div className="flex flex-col items-center justify-center text-lg">
                   <p className="font-bold">Aprašymas: </p>
                   <p>{profile.description}</p>
