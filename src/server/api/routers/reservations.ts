@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { reservations } from "~/server/db/schema";
 import { z } from "zod";
@@ -21,13 +21,19 @@ export const reservationsRouter = createTRPCRouter({
 
   getStudentReservations: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.reservations.findMany({
-      where: eq(reservations.studentId, ctx.session.user.id),
+      where: and(
+        eq(reservations.studentId, ctx.session.user.id),
+        eq(reservations.completed, 0),
+      ),
     });
   }),
 
   getTutorReservations: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.reservations.findMany({
-      where: eq(reservations.tutorId, ctx.session.user.id),
+      where: and(
+        eq(reservations.tutorId, ctx.session.user.id),
+        eq(reservations.completed, 0),
+      ),
       with: {
         student: true,
       },
