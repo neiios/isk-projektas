@@ -5,6 +5,8 @@ import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { getInitials } from "~/utils/helpers";
+import { GenericButton } from "./generic-button";
+import { revalidatePath } from "next/cache";
 
 export default async function TutorProfile() {
   const session = await getServerAuthSession();
@@ -34,11 +36,47 @@ export default async function TutorProfile() {
     redirect("/dashboard");
   }
 
+  async function deactivateAccount() {
+    "use server";
+    if (session === null) {
+      redirect("/api/auth/signin");
+    }
+
+    await db
+      .update(users)
+      .set({
+        isAvailable: 0,
+      })
+      .where(eq(users.id, session.user.id));
+
+    revalidatePath("/profile");
+    redirect("/profile");
+  }
+
+  async function activateAccount() {
+    "use server";
+    if (session === null) {
+      redirect("/api/auth/signin");
+    }
+
+    await db
+      .update(users)
+      .set({
+        isAvailable: 1,
+      })
+      .where(eq(users.id, session.user.id));
+
+    revalidatePath("/profile");
+    redirect("/profile");
+  }
+
   return (
     <>
       <h1 className="mb-20 text-5xl font-extrabold">Sveiki, {tutor.name}!</h1>
-      <div className="flex flex-col items-center justify-center gap-8 border border-black p-16 text-center shadow-sharp">
-        <div className="flex items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 border border-black p-16 text-center shadow-sharp">
+        <h2 className="mb-6 text-3xl font-bold">Profilio informacija</h2>
+
+        <div className="mb-8 flex items-center justify-center gap-4">
           {tutor.image ? (
             <Image
               src={tutor.image}
@@ -55,8 +93,6 @@ export default async function TutorProfile() {
           <p className="text-lg font-bold">{tutor.name}</p>
         </div>
 
-        <h2 className="text-3xl font-bold">Profilio informacija</h2>
-
         <p className="text-lg font-bold">
           El. paštas:{" "}
           <span className="font-normal text-black">{tutor.email}</span>
@@ -69,7 +105,7 @@ export default async function TutorProfile() {
 
         <p className="text-lg">
           <span className="font-bold">Valandinis įkainis: </span>
-          {tutor.pricePerHour}
+          {tutor.pricePerHour} Eur
         </p>
 
         <p className="text-lg">
@@ -79,9 +115,7 @@ export default async function TutorProfile() {
 
         <p className="max-w-md text-center text-lg">
           <span className="font-bold">Dalykai, kuriuos mokysite: </span>
-          <p>
-            {tutor.subjects.map((subject) => subject.subject.name).join(", ")}
-          </p>
+          {tutor.subjects.map((subject) => subject.subject.name).join(", ")}
         </p>
 
         <p className="max-w-md text-lg">
@@ -94,10 +128,24 @@ export default async function TutorProfile() {
           {tutor.studyTypes.map((studyType) => studyType.studyType).join(", ")}
         </p>
 
-        <div className="flex max-w-md flex-col items-center justify-center text-lg">
+        <div className="mb-8 flex max-w-md flex-col items-center justify-center text-lg">
           <p className="font-bold">Aprašymas: </p>
           <p>{tutor.description}</p>
         </div>
+
+        {tutor.isAvailable === 1 ? (
+          <GenericButton
+            clickHandler={deactivateAccount}
+            innerText="Deaktyvuoti paskyrą"
+          />
+        ) : null}
+
+        {tutor.isAvailable === 0 ? (
+          <GenericButton
+            clickHandler={activateAccount}
+            innerText="Aktyvuoti paskyrą"
+          />
+        ) : null}
       </div>
     </>
   );

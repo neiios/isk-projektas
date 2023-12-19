@@ -13,7 +13,7 @@ export function ApproveReservationButton({
         e.preventDefault();
         await approveReservation(reservationId);
       }}
-      className="border border-black p-4 font-bold shadow-sharp bg-white"
+      className="border border-black bg-white p-4 font-bold shadow-sharp"
     >
       Patvirtinti Rezervacija
     </button>
