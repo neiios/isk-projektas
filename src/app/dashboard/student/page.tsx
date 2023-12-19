@@ -61,7 +61,7 @@ export default async function Page() {
             return (
               <div
                 key={tutor.id}
-                className="flex flex-col gap-2 border border-black p-4 shadow-sharp"
+                className="flex flex-col gap-6 border border-black p-8 shadow-sharp"
               >
                 <div className="mb-8 flex items-center justify-center gap-4">
                   <div className="relative inline-flex h-[64px] w-[64px] items-center justify-center overflow-hidden rounded-full border border-black">
@@ -71,22 +71,26 @@ export default async function Page() {
                   </div>
                   <p className="text-lg font-bold">{tutor.name}</p>
                 </div>
-                <div className="flex justify-between gap-2">
-                  <p>Rezervacija patvirtinta:</p>
-                  <p>{reservation.approved === 1 ? "Taip" : "Ne"}</p>
+
+                <div>
+                  <div className="flex justify-between gap-2">
+                    <p className="font-bold">Rezervacija patvirtinta:</p>
+                    <p>{reservation.approved === 1 ? "Taip" : "Ne"}</p>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <p className="font-bold">El. paštas:</p>
+                    <p>{tutor.email}</p>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <p className="font-bold">Telefono numeris:</p>
+                    <p>{tutor.phoneNumber}</p>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <p className="font-bold">Valandos kaina:</p>
+                    <p>{tutor.pricePerHour} Eur</p>
+                  </div>
                 </div>
-                <div className="flex justify-between gap-2">
-                  <p>El. paštas:</p>
-                  <p>{tutor.email}</p>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <p>Telefono numeris:</p>
-                  <p>{tutor.phoneNumber}</p>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <p>Valandos kaina:</p>
-                  <p>{tutor.pricePerHour} Eur</p>
-                </div>
+
                 {reservation.approved !== 1 ? (
                   <CancelReservationButton
                     reservationId={reservation.id}
