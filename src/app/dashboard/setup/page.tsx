@@ -10,7 +10,7 @@ export default async function Page() {
       <h1 className="mb-8 text-5xl font-extrabold">
         Kas geriausiai jus apibūdina?
       </h1>
-      <div className="grid gap-8 md:grid-cols-2 md:grid-rows-2">
+      <div className="grid gap-8 md:grid-cols-2 md:grid-rows-">
         <SetupCard
           title="Mokinys < 16 m."
           href="/dashboard/setup/child"

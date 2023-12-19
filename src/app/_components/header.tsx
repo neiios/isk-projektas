@@ -21,7 +21,7 @@ export default async function Header() {
         ) : (
           <Link
             href="/api/auth/signin"
-            className="border border-black px-8 py-4 font-bold shadow-sharp"
+            className="border border-black px-8 py-4 font-bold shadow-sharp bg-white"
           >
             Prisijungti
           </Link>

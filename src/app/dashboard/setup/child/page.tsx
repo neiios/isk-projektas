@@ -15,7 +15,7 @@ export default async function ChildSetupPage() {
       </div>
       <Link
         href="/dashboard"
-        className="border border-black px-16 py-8 font-bold shadow-sharp"
+        className="border border-black px-16 py-8 font-bold shadow-sharp bg-white"
       >
         Grįžti atgal
       </Link>

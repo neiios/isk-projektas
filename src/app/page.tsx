@@ -21,9 +21,9 @@ export default async function Home() {
 
           <Link
             href={session ? "/dashboard" : "/api/auth/signin"}
-            className="border border-black px-16 py-6 font-bold shadow-sharp"
+            className="border border-black px-16 py-6 font-bold shadow-sharp bg-white"
           >
-            {session ? "Eiti į pagrindinį puslapį" : "Prisijungti"}
+            {session ? "Eiti į pagrindinį puslapį" : "Prisijunk prie mūsų!"}
           </Link>
         </div>
         <div>

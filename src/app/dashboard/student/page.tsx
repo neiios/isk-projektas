@@ -160,7 +160,7 @@ export default async function Page() {
             Nerandi tinkamo korepetitoriaus?
           </h2>
           <Link
-            className="border border-black px-16 py-6 shadow-sharp"
+            className="border border-black px-16 py-6 shadow-sharp bg-white font-bold"
             href="/dashboard/student/filter"
           >
             Išbandyk išplėstinę paiešką!

@@ -190,11 +190,11 @@ export default async function Page() {
           <div className="flex gap-4">
             <Link
               href="/dashboard"
-              className="border border-black px-16 py-4 font-bold shadow-sharp"
+              className="border border-black px-16 py-4 font-bold shadow-sharp bg-white"
             >
               Grįžti atgal
             </Link>
-            <button className="border border-black px-16 py-4 font-bold shadow-sharp">
+            <button className="border border-black px-16 py-4 font-bold shadow-sharp bg-white">
               Baigti registraciją
             </button>
           </div>

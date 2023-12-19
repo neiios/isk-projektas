@@ -15,7 +15,7 @@ export default function CancelReservationButton({
         e.preventDefault();
         await handleCancel(reservationId);
       }}
-      className="border border-black px-16 py-4 font-bold shadow-sharp"
+      className="border border-black px-16 py-4 font-bold shadow-sharp bg-white"
     >
       Atšaukti
     </button>
