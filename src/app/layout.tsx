@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`font-sans ${inter.variable} flex min-h-screen flex-col justify-between`}
-        style={{ backgroundColor: "#fdfbf6" }} // Added global background color
+        style={{ backgroundColor: "#fafafa" }} // Added global background color
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header></Header>
