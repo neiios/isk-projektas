@@ -37,11 +37,12 @@ pnpm dev
 
 If you are not familiar with the different technologies used in this project, please refer to the respective docs.
 
-- [Next.js](https://nextjs.org)
+- [Next.js / React](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
+- [Drizzle](https://orm.drizzle.team/)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
+- [MySQL](https://www.mysql.com/)
 
 To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
